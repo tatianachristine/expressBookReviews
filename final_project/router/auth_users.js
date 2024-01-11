@@ -8,6 +8,14 @@ let users = [];
 const isValid = (username)=>{ //returns boolean
 //write code to check is the username is valid
     /*const username = req.body.username;
+    let returnValue; // Type: boolean
+    returnValue = username.isValid(string, any, any, any);
+    function isValid( 
+   row : number,
+   column : number,
+   value : Object
+) : boolean;
+
     if (username) {
         IsValid( type=string, value=any, min_or_pattern=any, max=any );
         return true;
