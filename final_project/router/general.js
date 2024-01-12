@@ -83,7 +83,6 @@ public_users.get('/reviews/:isbn', function (req, res) {
         if (review.isbn === booksByIsbn) {
             return (Object.entries(review))
         };
-        //return book.reviews && book.reviews.some((review) => review.isbn === booksByIsbn);
     });
 
     res.send(filteredValues);

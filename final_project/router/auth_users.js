@@ -7,21 +7,14 @@ let users = [];
 
 const isValid = (username)=>{ //returns boolean
 //write code to check is the username is valid
-    /*const username = req.body.username;
-    let returnValue; // Type: boolean
-    returnValue = username.isValid(string, any, any, any);
-    function isValid( 
-   row : number,
-   column : number,
-   value : Object
-) : boolean;
-
-    if (username) {
-        IsValid( type=string, value=any, min_or_pattern=any, max=any );
+    let userswithsamename = users.filter((user)=>{
+        return user.username === username
+    });
+    if(userswithsamename.length > 0){
         return true;
-    } else{
+    } else {
         return false;
-    }*/
+    }
 }
 
 const authenticatedUser = (username,password)=>{ //returns boolean
@@ -63,7 +56,72 @@ regd_users.post("/login", (req,res) => {
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    const verificationStatus = jwt.verify(token, "access");
+    const booksByIsbn = req.params.isbn;
+    const bookArray = Object.values(books);
+    
+    let filteredValues = bookArray.filter((review) => {
+        if (verificationStatus) {
+            if (review.isbn === booksByIsbn) {
+                return (Object.entries(review))
+            }
+        }
+        
+    })
+
+    let filteredReviews = filteredValues.filter((review) => {
+        if (verificationStatus.user === review.username) {
+            return (Object.defineProperty(filteredValues, "reviews", {
+                get() {
+                    return review;
+                },
+                set(updatedReview) {
+                    review = updatedReview;
+                },
+                enumerable: true,
+                configurable: true,
+            }))
+        } else {
+            return (Object.create(review))
+        }
+    })
+
+    res.send("The review for the book with ISBN " + booksByIsbn + " has been added/updated.")
+    /*const review = req.params.review;
+    const booksByIsbn = req.params.isbn;
+    const bookArray = Object.values(books);
+    const verificationStatus = jsonwebtoken.verify()
+
+    let filteredValues = bookArray.filter((review) => {
+        if (!authenticatedUser) {
+            return res.status(208).json({message: "Invalid Login. Check username and password"});
+        } else {
+            if (review.isbn === booksByIsbn) {
+                return (Object.entries(review))
+        }
+        
+
+    let filteredUsers = bookArray.filter((review) => {
+        if (username === review.username) {
+            return (Object.defineProperty(filteredValues, "reviews", {
+                get() {
+                    return review;
+                },
+                set(updatedReview) {
+                    review = updatedReview;
+                },
+                enumerable: true,
+                configurable: true,
+            }))
+        } else {
+            return (Object.create(review))
+        }
+    })
+            
+        }
+       
+    });*/
+    
 });
 
 module.exports.authenticated = regd_users;
