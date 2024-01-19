@@ -57,6 +57,7 @@ regd_users.post("/login", (req,res) => {
 regd_users.put("/auth/review/:isbn", (req, res) => {
   //Write your code here
     const verificationStatus = jwt.verify(token, "access");
+    const username = req.body.username;
     const booksByIsbn = req.params.isbn;
     const bookArray = Object.values(books);
     
@@ -86,23 +87,28 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
         }
     })
 
-    res.send("The review for the book with ISBN " + booksByIsbn + " has been added/updated.")
-    /*const review = req.params.review;
+    res.send("The review for the book with ISBN " + booksByIsbn + " has been added/updated by " + username + ".")
+    
+});
+
+//Delete a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    const verificationStatus = jwt.verify(token, "access");
+    const username = req.body.username;
     const booksByIsbn = req.params.isbn;
     const bookArray = Object.values(books);
-    const verificationStatus = jsonwebtoken.verify()
-
+    
     let filteredValues = bookArray.filter((review) => {
-        if (!authenticatedUser) {
-            return res.status(208).json({message: "Invalid Login. Check username and password"});
-        } else {
+        if (verificationStatus) {
             if (review.isbn === booksByIsbn) {
                 return (Object.entries(review))
+            }
         }
         
+    })
 
-    let filteredUsers = bookArray.filter((review) => {
-        if (username === review.username) {
+    let filteredReviews = filteredValues.filter((review) => {
+        if (verificationStatus.user === review.username) {
             return (Object.defineProperty(filteredValues, "reviews", {
                 get() {
                     return review;
@@ -114,13 +120,11 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
                 configurable: true,
             }))
         } else {
-            return (Object.create(review))
+            return (Object.delete(review))
         }
     })
-            
-        }
-       
-    });*/
+
+    res.send("Reviews for the ISBN " + booksByIsbn + " posted by" + " " + username + " have been deleted.")
     
 });
 
