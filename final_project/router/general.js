@@ -34,44 +34,100 @@ public_users.post("/register", (req,res) => {
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
   //Write your code here
-  res.send(JSON.stringify(books,null,10));
-});
+    //res.send(JSON.stringify(books,null,10));
+    let options = {
+        host: '',
+        path: '/'
+    });
+
+    http.request(options,function(response) {
+        let foundBooks = books;
+
+        response.on('end', function() {
+            console.log(foundBooks);
+        });
+    }).end();
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
     const isbn = req.params.isbn;
-    res.send(books[isbn]);
+    //res.send(books[isbn]);
+    let options = {
+        host: '',
+        path: '/isbn/:isbn'
+    });
+
+    http.request(options,function(response) {
+        let foundBooks = books;
+
+        response.on('data', function(isbn) {
+            foundBooks += isbn;
+        });
+        response.on('end', function() {
+            console.log(foundBooks);
+        });
+    }).end();
 });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
     const booksByAuthor = req.params.author;
-    const bookArray = Object.values(books);
+    //const bookArray = Object.values(books);
 
-    let filteredValues = bookArray.filter((book) => {
+    /*let filteredValues = bookArray.filter((book) => {
         if (book.author === booksByAuthor) {
             return (Object.entries(books))
         };
     });
 
-    res.send({"booksbyauthor" : filteredValues});
+    res.send({"booksbyauthor" : filteredValues});*/
+    let options = {
+        host: '',
+        path: '/author/:author'
+    });
+
+    http.request(options,function(response) {
+        let foundBooks = books;
+
+        response.on('data', function(author) {
+            foundBooks += author;
+        });
+        response.on('end', function() {
+            console.log(foundBooks);
+        });
+    }).end();
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
     const booksByTitle = req.params.title;
-    const bookArray = Object.values(books);
+    //const bookArray = Object.values(books);
 
-    let filteredValues = bookArray.filter((book) => {
+    /*let filteredValues = bookArray.filter((book) => {
         if (book.title === booksByTitle) {
             return (Object.entries(books))
         };
     });
 
-    res.send({"booksbytitle" : filteredValues})
+    res.send({"booksbytitle" : filteredValues})*/
+    let options = {
+        host: '',
+        path: '/title/:title'
+    });
+
+    http.request(options,function(response) {
+        let foundBooks = books;
+
+        response.on('data', function(title) {
+            foundBooks += title;
+        });
+        response.on('end', function() {
+            console.log(foundBooks);
+        });
+    }).end();
 });
 
 // Get book review
