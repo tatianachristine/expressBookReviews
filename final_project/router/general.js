@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
@@ -47,6 +48,7 @@ public_users.get('/',function (req, res) {
             console.log(foundBooks);
         });
     }).end();*/
+    books.all(
     const connectToURL = (url) => {
         const getBooks = axios.get(url);
         console.log(getBooks);
@@ -182,7 +184,6 @@ public_users.get('/title/:title',function (req, res) {
 
     connectToUrl('https://tatianachris-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/title/Fairy Tales');
 })
-});
 
 // Get book review
 public_users.get('/reviews/:isbn', function (req, res) {
