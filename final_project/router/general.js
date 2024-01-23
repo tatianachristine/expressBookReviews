@@ -48,25 +48,17 @@ public_users.get('/',function (req, res) {
             console.log(foundBooks);
         });
     }).end();*/
-    let response;
-    try {
-        response = await request('https://tatianachris-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai');
-    } catch (err) {
-        logger.error('Http error', err);
-        return res.status(500).send();
+    const connectToURL = async(url) => {
+        const outcome = axios.get(url);
+        let listOfBooks = (await outcome).data.books;
+        listOfBooks.forEach((book)=>{
+            console.log(book);
+        });
     }
 
-    let document;
-    try {
-        document = await response({ books });
-    } catch (err) {
-        logger.error('Document error', err);
-        return res.status(500).send();
-    }
-
-  executeLogic(document, req, res);
-}
-    
+    console.log("Before connect URL")
+    connectToURL('https://tatianachris-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/');
+    console.log("After connect URL")
 })
 
 // Get book details based on ISBN
@@ -89,8 +81,31 @@ public_users.get('/isbn/:isbn',function (req, res) {
             console.log(foundBooks);
         });
     }).end();*/
-    const connectToUrl = (url) => {
-        const booksByIsbn = axios.get(url);
+    async function connectToUrl(url){
+        const resp = await axios.get(url);
+        let listOfBooks = resp.data.books;
+        let isbn = listOfBooks.map((book)=>{
+            return book.isbn
+        });
+        isbn = [...newSet(isbn)];
+
+        isbn.forEach(async (Category)=>{
+            if (Category.isbn(':isbn')) {
+                try {
+                    const resp = await axios({
+                        method: 'get',
+                        url: "https://tatianachris-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/isbn?Category"+Category,
+                        responseType: 'json'
+                    })
+                    console.log(Category+" "+resp.data.count);
+                }
+                catch(e) {
+                    console.log(e);
+                }
+            }
+        });
+    }
+    connectToURL('http
         console.log(booksByIsbn);
         booksByIsbn.then (resp => {
             console.log("Fulfilled");
