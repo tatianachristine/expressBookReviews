@@ -33,35 +33,22 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
+public_users.get('/',function (err, req, res) {
   //Write your code here
     //res.send(JSON.stringify(books,null,10));
-    /*let options = {
-        host: '',
+    let options = {
+        host: 'https://tatianachris-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai',
         path: '/'
     });
 
-    http.request(options,function(response) {
+    http.req(options, function(res) {
         let foundBooks = books;
 
         response.on('end', function() {
             console.log(foundBooks);
         });
     }).end();*/
-    books.all(
-    const connectToURL = (url) => {
-        const getBooks = axios.get(url);
-        console.log(getBooks);
-        getBooks.then(resp => {
-            console.log("Fulfilled");
-            console.log(resp.data);
-        })
-        .catch(err => {
-            console.log("Rejected");
-        })
-    }
-
-    connectToURL('https://tatianachris-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/');
+    
 })
 
 // Get book details based on ISBN
