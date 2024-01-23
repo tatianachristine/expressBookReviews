@@ -33,10 +33,10 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (err, req, res) {
+public_users.get('/',function (req, res) {
   //Write your code here
     //res.send(JSON.stringify(books,null,10));
-    let options = {
+    /*let options = {
         host: 'https://tatianachris-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai',
         path: '/'
     });
@@ -48,6 +48,24 @@ public_users.get('/',function (err, req, res) {
             console.log(foundBooks);
         });
     }).end();*/
+    let response;
+    try {
+        response = await request('https://tatianachris-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai');
+    } catch (err) {
+        logger.error('Http error', err);
+        return res.status(500).send();
+    }
+
+    let document;
+    try {
+        document = await response({ books });
+    } catch (err) {
+        logger.error('Document error', err);
+        return res.status(500).send();
+    }
+
+  executeLogic(document, req, res);
+}
     
 })
 
