@@ -1,5 +1,4 @@
 const express = require('express');
-const axios = require('axios');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
@@ -33,177 +32,94 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
+public_users.get('/books',function (req, res) {
   //Write your code here
     //res.send(JSON.stringify(books,null,10));
-    /*let options = {
-        host: 'https://tatianachris-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai',
-        path: '/'
+    const listBooks = new Promise((resolve, reject) => {
+        resolve(res.send(JSON.stringify({books}, null, 10)));
     });
 
-    http.req(options, function(res) {
-        let foundBooks = books;
+    listBooks.then(() => console.log("Promise for Task 10 resolved"));
 
-        response.on('end', function() {
-            console.log(foundBooks);
-        });
-    }).end();*/
-    const connectToURL = async(url) => {
-        const outcome = axios.get(url);
-        let listOfBooks = (await outcome).data.books;
-        listOfBooks.forEach((book)=>{
-            console.log(book);
-        });
-    }
-
-    console.log("Before connect URL")
-    connectToURL('https://tatianachris-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/');
-    console.log("After connect URL")
-})
-
+});
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
+public_users.get('/books/isbn/:isbn',function (req, res) {
   //Write your code here
-    const isbn = req.params.isbn;
-    //res.send(books[isbn]);
-    /*let options = {
-        host: '',
-        path: '/isbn/:isbn'
+    const booksByIsbn = req.params.isbn;
+    //const bookArray = Object.values(books);
+    //res.send(JSON.stringify(books[isbn]));
+    const listBooks = new Promise((resolve, reject) => {
+        resolve(true);
+    })
+    const filterBooks = new Promise((resolve, reject) => {
+        let reqBooks = listBooks
+        if (listBooks.isbn === booksByIsbn) {
+            return (Object.values(books)),
+            resolve(res.send)
+        };
     });
-
-    http.request(options,function(response) {
-        let foundBooks = books;
-
-        response.on('data', function(isbn) {
-            foundBooks += isbn;
-        });
-        response.on('end', function() {
-            console.log(foundBooks);
-        });
-    }).end();*/
-    async function connectToUrl(url){
-        const resp = await axios.get(url);
-        let listOfBooks = resp.data.books;
-        let isbn = listOfBooks.map((book)=>{
-            return book.isbn
-        });
-        isbn = [...newSet(isbn)];
-
-        isbn.forEach(async (Category)=>{
-            if (Category.isbn(':isbn')) {
-                try {
-                    const resp = await axios({
-                        method: 'get',
-                        url: "https://tatianachris-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/isbn?Category"+Category,
-                        responseType: 'json'
-                    })
-                    console.log(Category+" "+resp.data.count);
-                }
-                catch(e) {
-                    console.log(e);
-                }
+    /*var reqBooks = function() {
+        var promise = new Promise((resolve, reject) => {
+            if (listBooks === booksByIsbn) {
+                resolve(res.send({books}));
             }
         });
-    }
-    connectToURL('http
-        console.log(booksByIsbn);
-        booksByIsbn.then (resp => {
-            console.log("Fulfilled");
-            console.log(resp.data);
-        })
-        .catch(err => {
-            console.log("Rejected");
-        })
-    }
+        return promise;
+    };*/
+        
+    listBooks.then(() => {
+        console.log("Promise 1 resolved");
+        filterBooks.then(() => {
+            res.send(Object.entries({reqBooks})),
+            console.log("Promise 2 resolved")
+        });
+    });
+});
 
-    connectToUrl('https://tatianachris-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/isbn/1');
-})
   
 // Get book details based on author
-public_users.get('/author/:author',function (req, res) {
+public_users.get('/books/author/:author',function (req, res) {
   //Write your code here
     const booksByAuthor = req.params.author;
     //const bookArray = Object.values(books);
-
-    /*let filteredValues = bookArray.filter((book) => {
+    const listBooks = new Promise((resolve, reject) => {
+        resolve(res.send(JSON.stringify({books}, null, 10)));
+    });
+    const filterBooks = new Promise((resolve, reject) => {
         if (book.author === booksByAuthor) {
-            return (Object.entries(books))
-        };
+            resolve(res.send(JSON.stringify({books}, null, 10)));
+        }
     });
 
-    res.send({"booksbyauthor" : filteredValues});*/
-    /*let options = {
-        host: '',
-        path: '/author/:author'
-    });
-
-    http.request(options,function(response) {
-        let foundBooks = books;
-
-        response.on('data', function(author) {
-            foundBooks += author;
-        });
-        response.on('end', function() {
-            console.log(foundBooks);
-        });
-    }).end();*/
-    const connectToUrl = (url) => {
-        const booksByAuthor = axios.get(url);
-        console.log(booksByAuthor);
-        booksByIsbn.then (resp => {
-            console.log("Fulfilled");
-            console.log(resp.data);
+    listBooks.then((successMessage) => {
+        console.log("From Callback " + successMessage)
+        filterBooks.then((successMessage) => {
+            console.log("From Callback " + successMessage)
         })
-        .catch(err => {
-            console.log("Rejected");
-        })
-    }
-
-    connectToUrl('https://tatianachris-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/author/Chinua Achebe');
-})
+    })
+});
 
 // Get all books based on title
-public_users.get('/title/:title',function (req, res) {
+public_users.get('/books/title/:title',function (req, res) {
   //Write your code here
     const booksByTitle = req.params.title;
     //const bookArray = Object.values(books);
-
-    /*let filteredValues = bookArray.filter((book) => {
+    const listBooks = new Promise((resolve, reject) => {
+        resolve(res.send(JSON.stringify({books}, null, 10)));
+    });
+    const filterBooks = new Promise((resolve, reject) => {
         if (book.title === booksByTitle) {
-            return (Object.entries(books))
-        };
+            resolve(res.send(JSON.stringify({books}, null, 10)));
+        }
     });
 
-    res.send({"booksbytitle" : filteredValues})*/
-    /*let options = {
-        host: '',
-        path: '/title/:title'
-    });
-
-    http.request(options,function(response) {
-        let foundBooks = books;
-
-        response.on('data', function(title) {
-            foundBooks += title;
-        });
-        response.on('end', function() {
-            console.log(foundBooks);
-        });
-    }).end();*/
-    const connectToUrl = (url) => {
-        const booksByTitle = axios.get(url);
-        console.log(booksByTitle);
-        booksByIsbn.then (resp => {
-            console.log("Fulfilled");
-            console.log(resp.data);
+    listBooks.then((successMessage) => {
+        console.log("From Callback " + successMessage)
+        filterBooks.then((successMessage) => {
+            console.log("From Callback " + successMessage)
         })
-        .catch(err => {
-            console.log("Rejected");
-        })
-    }
-
-    connectToUrl('https://tatianachris-5000.theianext-1-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai/title/Fairy Tales');
-})
+    })
+});
 
 // Get book review
 public_users.get('/reviews/:isbn', function (req, res) {
