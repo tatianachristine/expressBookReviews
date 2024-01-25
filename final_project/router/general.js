@@ -1,8 +1,28 @@
 const express = require('express');
+const axios = require('axios');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
+let url = "https://tatianachris-5000.theianext-0-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai";
+
+const listBooks = new Promise((resolve, reject) => {
+    resolve(JSON.stringify({books}, null, 10));
+});
+
+public_users.get('/books/isbn/:isbn', async function filterBooks (req, res) {
+    let newBookList = await listBooks;
+    const booksByIsbn = req.params.isbn;
+    const bookArray = Object.values(books);
+    
+    bookArray.filter((book) => {
+        if (book.isbn === booksByIsbn) {
+            return Promise.resolve(res.send(JSON.stringify(newBookList)));
+        } else {
+            return console.log("Can't find book with ISBN provided.");
+        }
+    });
+});
 
 const doesExist = (username)=>{
     let userswithsamename = users.filter((user)=>{
@@ -46,34 +66,32 @@ public_users.get('/books',function (req, res) {
 public_users.get('/books/isbn/:isbn',function (req, res) {
   //Write your code here
     const booksByIsbn = req.params.isbn;
-    //const bookArray = Object.values(books);
-    //res.send(JSON.stringify(books[isbn]));
-    const listBooks = new Promise((resolve, reject) => {
-        resolve(true);
-    })
-    const filterBooks = new Promise((resolve, reject) => {
-        let reqBooks = listBooks
-        if (listBooks.isbn === booksByIsbn) {
-            return (Object.values(books)),
-            resolve(res.send)
-        };
-    });
-    /*var reqBooks = function() {
-        var promise = new Promise((resolve, reject) => {
-            if (listBooks === booksByIsbn) {
-                resolve(res.send({books}));
-            }
+    const bookArray = Object.values(books);
+
+    
+    /*async function getBooks() {
+        let firstPromise = new Promise(function(resolve) {
+            const bookList = await axios.get(url);
+            resolve(bookList);
         });
-        return promise;
+        return firstPromise;
     };*/
-        
-    listBooks.then(() => {
-        console.log("Promise 1 resolved");
-        filterBooks.then(() => {
-            res.send(Object.entries({reqBooks})),
-            console.log("Promise 2 resolved")
+
+    /*async function filterBooks() {
+        let twoPromise = new Promise(function(resolve, reject) {
+            let newBookList = await firstPromise;
+            bookArray.filter((book) => {
+                if (book.isbn === booksByIsbn) {
+                    resolve(newBookList);
+                } else {
+                    reject("Can't find book with ISBN provided.");
+                }
+            });
         });
-    });
+        return twoPromise;
+    }*/
+    
+    filterBooks().then(() => console.log("Promise for Task 11 resolved!"));
 });
 
   
