@@ -5,25 +5,8 @@ const public_users = express.Router();
 let url = "https://tatianachris-5000.theianext-0-labs-prod-misc-tools-us-east-0.proxy.cognitiveclass.ai";
 
 
-public_users.get('/books', async function getBooks(res) {
-    res(JSON.stringify({books}, null, 10));
-});
-
-
-        
-
-
-    
-    (JSON.stringify({books}, null, 10));
-    });
-    axios.get(url).then(getBooks(res) {
-        console.log(res);
-    }).catch(getBooks(err) {
-        console.log(err)
-    })
-
-
-    const listBooks = new Promise((resolve, reject) => {
+public_users.get('/books', function (req, res) {
+    const get_books = new Promise((resolve, reject) => {
         resolve(res.send(JSON.stringify({books}, null, 10)));
     });
     get_books.then(() => console.log("Promise for Task 10 resolved!"));
@@ -43,7 +26,7 @@ public_users.get('/books/isbn/:isbn', async function findIsbn (req, res) {
             return reject(console.log("Can't find book with ISBN provided."));
         }
     });
-    getBooks(res).then(() => {
+    listBooks.then(() => {
         get_isbn.then(() => console.log("Promise for Task 11 resolved!"));
     });
 });
